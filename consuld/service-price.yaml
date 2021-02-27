@@ -1,0 +1,95 @@
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+
+eureka:
+  instance:
+    hostname: service-price-management
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://iserve-registry.iserve-euw1-prod-ns.svc.cluster.local:8761/eureka}
+    healthcheck:
+      enabled: true
+server:
+  port: 8000
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 20000
+        readTimeout: 20000
+
+spring:
+  sleuth:
+    sampler:
+      probability: 1
+      percentage: 1.0
+  cloud:
+    gcp:
+      trace:
+        enabled: true
+        num-executor-threads: 100
+      spanner:
+        instance-id: iserve-euw1-prod-spanner
+        database: mtcserv
+        project-id: ingka-iserve-infra-prod
+        minSessions: 10
+        maxIdleSessions: 50
+
+
+memcached:
+  cache:
+    enabled: true
+    servers: iserve-euw1-prod-memcached-memcached-svc.iserve-euw1-prod-ns.svc.cluster.local:11211
+    prefix: memcached:service-pricing-mgmt
+    protocol: binary
+    #global expiration time is 86400(in second) 1 day and specific key time is 1 hour.
+    expirations: >
+      86400,
+      getServiceConfigurationListForBuCode:3600,
+      getServiceConfigurationListForZipCode:3600,
+      findByDeliveryMethodIdAndCountryCodeAndBuCodeAndBuType:3600,
+      getDeliveryAreaPrices:3600,
+      findByPriceConfigurationNoCountryCodeZipCode:3600,
+      getDeliveryPriceIntervals:3600,
+      getDeliveryPriceCalcMethod:3600,
+      getFreightHierarchy:86400,
+      deliveryPriceStorage:86400,
+      deliveryPricePrimeTime:86400
+    schedule:
+      #schedule fixed-rate and initial-delay is 86400000(in millisecond) 1 day.
+      fixed-rate: 86400000
+      initial-delay: 86400000
+      isSchedulerOn: true
+      isBeanCreated: ${memcached.cache.enabled}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+iserve:
+  tax-inclusive-default: true
+  locality:
+    tax-mappings:
+      US: false
+      CA: false
+      IN: false
+      HU: false
+
+statecode-config:
+  mandatory-countries:
+    - US
+    - CA
+    - IN
+    - AU
+    - NDTV
