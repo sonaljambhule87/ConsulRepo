@@ -10,14 +10,6 @@ ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
 
-eureka:
-  instance:
-    hostname: service-price-management
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI:http://iserve-registry.iserve-euw1-prod-ns.svc.cluster.local:8761/eureka}
-    healthcheck:
-      enabled: true
 server:
   port: 8000
 
@@ -40,8 +32,6 @@ spring:
         num-executor-threads: 100
       spanner:
         instance-id: iserve-euw1-prod-spanner
-        database: mtcserv
-        project-id: ingka-iserve-infra-prod
         minSessions: 10
         maxIdleSessions: 50
 
@@ -49,7 +39,7 @@ spring:
 memcached:
   cache:
     enabled: true
-    servers: iserve-euw1-prod-memcached-memcached-svc.iserve-euw1-prod-ns.svc.cluster.local:11211
+    servers: 
     prefix: memcached:service-pricing-mgmt
     protocol: binary
     #global expiration time is 86400(in second) 1 day and specific key time is 1 hour.
