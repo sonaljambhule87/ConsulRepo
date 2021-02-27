@@ -19,7 +19,7 @@ eureka:
     healthcheck:
       enabled: true
 server:
-  port: 8888
+  port: 8000
 
 feign:
   client:
