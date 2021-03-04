@@ -2,6 +2,6 @@ spring:
     datasource:
         database: cdctest
         driver-class-name: com.mysql.cj.jdbc.Driver
-        password: root
+        password: myroot
         url: jdbc:mysql://localhost:3306/cdctest?useSSL=false
         username: newpwd
